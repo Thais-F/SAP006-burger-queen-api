@@ -9,8 +9,5 @@ const router = Router()
 // aqui vai as requisições
 router.get("/", getExample)
 router.get("/other", getOtherExample)
-router.get("/")
-router.get("/")
-router.get("/")
 
 module.exports = router
