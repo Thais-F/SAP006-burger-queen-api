@@ -1,5 +1,5 @@
 // aqui vai o código que acessa o banco de dados
-const  teste  = require('../db/models/teste'); 
+// const  teste  = require('../db/models/teste'); 
 // const Sequelize = require('sequelize');
 // aqui vão as importações dos models
 

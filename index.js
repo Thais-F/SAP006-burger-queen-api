@@ -12,9 +12,9 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use('/', routes);
 
-sequelize.sync().then(() => {
-  console.log('deu certoo???')
-})
+// sequelize.sync().then(() => {
+//   console.log('deu certoo???')
+// })
 
 app.get('*', (req, res) => {
   res.send('Hello World!');
