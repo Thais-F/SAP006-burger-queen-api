@@ -2,13 +2,12 @@
 
 const fs = require('fs');
 const path = require('path');
-// const { QueryInterface } = require('sequelize');
+const { QueryInterface } = require('sequelize');
 const Sequelize = require('sequelize');
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
 const config = require(__dirname + '/../config/config.json')[env];
-const Teste = require('../migrations/20210318154049-create-teste');
-// const db = {}
+const db = {}
 
 let sequelize;
 if (config.use_env_variable) {
@@ -17,15 +16,7 @@ if (config.use_env_variable) {
   sequelize = new Sequelize(config.database, config.username, config.password, config);
 }
 
-const queryInterface = sequelize.getQueryInterface();
-
-const teste = Teste.up(queryInterface, Sequelize);
-
-const db = {
-  teste,
-  sequelize
-};
-
+// const queryInterface = sequelize.getQueryInterface();
 
 fs
   .readdirSync(__dirname)
@@ -43,7 +34,7 @@ Object.keys(db).forEach(modelName => {
   }
 });
 
-//db.sequelize = sequelize;
-//db.Sequelize = Sequelize;
+db.sequelize = sequelize;
+db.Sequelize = Sequelize;
 
 module.exports = db;
