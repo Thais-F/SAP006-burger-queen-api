@@ -1,13 +1,13 @@
 const { Router } = require('express')
-const { getUsers } = require('../controller/usersController')
+const { getUsers, postUsers, getUserbyId } = require('../controller/usersController')
 
 
 const router = Router()
 
 // aqui vai as requisições
 router.get("/", getUsers)
-router.get("/:uid",  )
-router.post("/", )
+router.get("/:uid", getUserbyId)
+router.post("/", postUsers)
 router.put("/:uid", )
 router.delete("/:uid", )
 
