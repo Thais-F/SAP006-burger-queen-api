@@ -23,29 +23,33 @@ const getUserbyId = async (req, res) => {
 // tratamento de erro
 const postUsers = async (req, res) => {
   const { name, email, password, role, restaurant } = req.body
-  await users.create({ name, email, password, role, restaurant })
+  const newUser = await users.create({ name, email, password, role, restaurant })
   res.status(200).send("usuário adicionado com sucesso")
 }
 
+// tratamento de erro
 const updateUser = async (req, res) => {
   const user_id = req.params.uid;
   const { name, email, password, role, restaurant } = req.body;
-  // const userbyId = await users.findByPk(user_id);
-  // if (!userbyId) {
-  //   return res.status(400).json({error: "Usuário não encontrado"});
-  // }
-  // else {  
-    // if (name) {
     await users.update({name, email, password, role, restaurant}, 
       {
         where: {
           id: user_id
         }
       })
-    // }
-    //    }
     const updatedUser = await users.findByPk(user_id);
     res.status(200).json(updatedUser);
  }
 
-module.exports = { getUsers, postUsers, getUserbyId, updateUser }
+ // tratamento de erro
+ const deleteUser = async (req, res) => {
+  const user_id = req.params.uid;
+  await users.destroy({
+    where: {
+      id: user_id
+    }
+  })
+  res.status(200).send("Usuário deletado com sucesso");
+ }
+
+module.exports = { getUsers, postUsers, getUserbyId, updateUser, deleteUser }
