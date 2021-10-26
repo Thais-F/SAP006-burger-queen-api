@@ -2,17 +2,27 @@ const { orders } = require('../db/models')
 const { ordersproducts } = require('../db/models')
 const { products } = require('../db/models')
 
-// tratamento de erro, excluir ordersproducts do resultado
-const getOrders = async (req, res) => {
-    const allOrders = await orders.findAll({
-      include: { model: products, as: 'products' },
-      attributes: { exclude: ['products[0].ordersproducts'] } 
-    })
-    res.status(200).json(allOrders);
+// excluir alguns itens de products; ordersproducts do resultado
+const getOrders = async (req, res, next) => {
+    try {
+      const allOrders = await orders.findAll({
+        include: { 
+          association: 'products',
+          through: {
+            attributes: ['qtd']
+          }
+        },
+      })
+      res.status(200).json(allOrders);
+    }
+    catch (error){
+      next(error)
+    }   
 }
 
-// tratamento de erro, excluir ordersproducts do resultado
-const getOrderById = async (req, res) => {
+// excluir alguns itens de products; ordersproducts do resultado
+const getOrderById = async (req, res, next) => {
+  try {
     const order_id = req.params.orderId;
     const order = await orders.findByPk(order_id, {
       include: { model: products, as: 'products' }
@@ -22,17 +32,22 @@ const getOrderById = async (req, res) => {
       return res.status(400).json({message: "Pedido não encontrado"});
     }
     res.status(200).json(order);
+  }
+  catch (error){
+    next(error)
+  }   
 }
 
-// tratamento de erro, excluir ordersproducts do resultado
-const postOrder = async (req, res) => {
-  const { client_name, table } = req.body;
+// excluir alguns itens de products; ordersproducts do resultado
+const postOrder = async (req, res, next) => {
+  try {
+    const { client_name, table } = req.body;
   const user_id = 1;
   const productsArray = req.body.products;
 
   let { product_id, qtd } = 0;
 
-  const order = await orders.create({ client_name, table, user_id})
+  const order = await orders.create({ client_name, table, user_id, processedAt: new Date()})
   const order_id = order.id;
 
   const promises = productsArray.map(async product => {
@@ -43,39 +58,53 @@ const postOrder = async (req, res) => {
 
   await Promise.all(promises);
 
-  const newOrder = await orders.findByPk(order_id, { 
-    include: { model: products, as: 'products' },
-    // through: { 
-    //   model: ordersproducts,
-    //   as: "ordersproducts",
-    //   attributes: {exclude: ["order_id"] ["product_id"] }
-    // }
-  });
+  const newOrder = await orders.findByPk(order_id, {
+      include: { 
+        association: 'products',
+        through: {
+          attributes: ['qtd']
+        }
+      },
+    });
   
   res.status(200).send(newOrder);
-
-}
-
-// tratamento de erro, excluir ordersproducts do resultado
-const updateOrder = async (req, res) => {
-  const order_id = req.params.orderId;
-  const { status } = req.body;
-  
-  await orders.update({status}, {
-    where: {
-      id: order_id
+  }
+    catch (error){
+      next(error)
     }
-  });
-
-  const updatedOrder = await orders.findByPk(order_id, {
-    include: { model: products, as: 'products' }
-  });
-    res.status(200).json(updatedOrder);
 }
 
-// tratamento de erro
-const deleteOrder = async (req, res) => {
-  const order_id = req.params.orderId;
+// excluir alguns itens de products; ordersproducts do resultado
+const updateOrder = async (req, res, next) => {
+  try {
+    const order_id = req.params.orderId;
+    const { status } = req.body;
+    
+    await orders.update({status, processedAt: new Date()}, {
+      where: {
+        id: order_id
+      }
+    });
+  
+    const updatedOrder = await orders.findByPk(order_id, {
+      include: { 
+        association: 'products',
+        through: {
+          attributes: ['qtd']
+        }
+      },
+    });
+      res.status(200).json(updatedOrder);
+  }
+    catch (error){
+      next(error)
+    }
+}
+
+// excluir alguns itens de products; ordersproducts do resultado
+const deleteOrder = async (req, res, next) => {
+  try {
+    const order_id = req.params.orderId;
 
   await orders.destroy({
     where: {
@@ -84,6 +113,10 @@ const deleteOrder = async (req, res) => {
   })
 
   res.status(200).send("Pedido deletado com sucesso");
+  }
+    catch (error){
+      next(error)
+    }
 }
   
   module.exports = { getOrders, getOrderById, postOrder, updateOrder, deleteOrder }
