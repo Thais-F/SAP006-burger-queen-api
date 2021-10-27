@@ -14,12 +14,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/', routes);
 
 app.use((err, req, res, next) => {
-  // if (process.env.NODE_ENV === "production") {
-  //   res.status(500).json({ error: "Erro interno do servidor"});
-  // } 
-  // else {
+  if (process.env.NODE_ENV === "production") {
+    res.status(500).json({ error: "Erro interno do servidor"});
+  } 
+  else {
     return next(err);
-  // }
+  }
 })
 
 // sequelize.sync().then(() => {
