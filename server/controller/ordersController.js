@@ -50,8 +50,7 @@ const getOrderById = async (req, res, next) => {
 // Feito!
 const postOrder = async (req, res, next) => {
   try {
-    const { client_name, table } = req.body;
-    const user_id = 1;
+    const { client_name, table, user_id } = req.body;
     const productsArray = req.body.products;
 
     let { product_id, qtd } = 0;

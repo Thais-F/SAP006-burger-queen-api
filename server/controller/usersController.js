@@ -33,7 +33,10 @@ const postUsers = async (req, res, next) => {
   try {
     const { name, email, password, role, restaurant } = req.body
     const newUser = await users.create({ name, email, password, role, restaurant })
-    res.status(200).send(newUser)
+    const response = await users.findByPk(newUser.id, {
+      attributes: { exclude: ['password'] }
+    });
+    res.status(200).send(response)
   } catch (error) {
     next(error);
   }
