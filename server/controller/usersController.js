@@ -39,10 +39,15 @@ const postUsers = async (req, res, next) => {
   }
 }
 
-// feito!
+// feito! testar novamente
 const updateUser = async (req, res, next) => {
   try {
     const user_id = req.params.uid;
+    const userbyId = await users.findByPk(user_id);
+    if (!userbyId) {
+      return res.status(400).json({ message: "Usuário não encontrado" });
+    }
+
     const { name, email, password, role, restaurant } = req.body;
     await users.update({ name, email, password, role, restaurant },
       {
@@ -50,7 +55,9 @@ const updateUser = async (req, res, next) => {
           id: user_id
         }
       })
-    const updatedUser = await users.findByPk(user_id);
+    const updatedUser = await users.findByPk(user_id, {
+      attributes: { exclude: ['password'] }
+    });
     res.status(200).json(updatedUser);
   } catch (error) {
     next(error);
