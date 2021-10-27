@@ -1,3 +1,5 @@
+if (process.env.NODE_ENV !== 'production') { require('dotenv').config(); }
+
 module.exports = {
     "development": {
       "username": process.env.DB_USERNAME,
@@ -6,10 +8,10 @@ module.exports = {
       "host": process.env.DB_HOST,
       "dialect": "postgres",
       "dialectOptions": {
-        // "ssl": {
-        //   "require": true,
-        //   "rejectUnauthorized": false
-        // }
+        "ssl": {
+          "require": true,
+          "rejectUnauthorized": false
+        }
       }
     },
     "test": {
