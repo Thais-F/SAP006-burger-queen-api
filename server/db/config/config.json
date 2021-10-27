@@ -1,0 +1,29 @@
+{
+    "development": {
+      "username": "postgres",
+      "password": "Postgres@970729",
+      "database": "Magic-Burger",
+      "host": "127.0.0.1",
+      "dialect": "postgres",
+      "dialectOptions": {
+      }
+    },
+    "test": {
+      "username": "postgres",
+      "password": "Postgres@970729",
+      "database": "Magic-Burger",
+      "host": "127.0.0.1",
+      "dialect": "postgres",
+      "dialectOptions": {
+      }
+    },
+    "production": {
+      "username": "postgres",
+      "password": "Postgres@970729",
+      "database": "Magic-Burger",
+      "host": "127.0.0.1",
+      "dialect": "postgres",
+      "dialectOptions": {
+      }
+    }
+  }
