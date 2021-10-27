@@ -33,7 +33,7 @@ const postUsers = async (req, res, next) => {
   try {
     const { name, email, password, role, restaurant } = req.body
     const newUser = await users.create({ name, email, password, role, restaurant })
-    res.status(200).send("usuário adicionado com sucesso")
+    res.status(200).send(newUser)
   } catch (error) {
     next(error);
   }
