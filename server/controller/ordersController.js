@@ -61,9 +61,8 @@ const postOrder = async (req, res, next) => {
       product_id = product.id;
       const checked = await products.findByPk(product_id)
       if (!checked) {
-        const productNotFound = product_id;
         allChecked = false
-        return res.status(400).json({ message: `Produto ${productNotFound} não encontrado!` })
+        return res.status(400).json({ message: `Produto(s) não encontrado(s)!` })
       }
     })
 
