@@ -1,14 +1,14 @@
 const { Router } = require('express')
-const { getOrders } = require('../controller/ordersController')
+const { getOrders, getOrderById, postOrder, updateOrder, deleteOrder } = require('../controller/ordersController')
 
 
 const router = Router()
 
-// aqui vai as requisições
+// aqui vão as requisições
 router.get("/", getOrders)
-router.get("/:orderId", )
-router.post("/", )
-router.put("/:orderId", )
-router.delete("/:orderId", )
+router.get("/:orderId", getOrderById)
+router.post("/", postOrder)
+router.put("/:orderId", updateOrder)
+router.delete("/:orderId", deleteOrder)
 
 module.exports = router

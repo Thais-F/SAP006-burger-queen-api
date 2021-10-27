@@ -5,7 +5,7 @@ const ordersRouter = require('../routes/ordersRouter')
 
 const router = Router()
 
-// aqui vai todas as rotas
+// aqui vão todas as rotas
 router.use('/users', usersRouter);
 router.use('/products', productsRouter);
 router.use('/orders', ordersRouter);
