@@ -1,6 +1,6 @@
 const { orders } = require('../db/models')
 const { ordersproducts } = require('../db/models')
-// const { products } = require('../db/models')
+const { products } = require('../db/models')
 
 // Feito!
 const getOrders = async (req, res, next) => {
@@ -47,7 +47,7 @@ const getOrderById = async (req, res, next) => {
   }
 }
 
-// Verificar se os produtos existem antes de criar o pedido
+// Feito!
 const postOrder = async (req, res, next) => {
   try {
     const { client_name, table } = req.body;
@@ -55,37 +55,51 @@ const postOrder = async (req, res, next) => {
     const productsArray = req.body.products;
 
     let { product_id, qtd } = 0;
+    let allChecked = true;
 
-    const order = await orders.create({ client_name, table, user_id, processedAt: new Date() })
-    const order_id = order.id;
-
-    const promises = productsArray.map(async product => {
+    const checkProduct = productsArray.map(async product => {
       product_id = product.id;
-      qtd = product.qtd;
-      await ordersproducts.create({ order_id, product_id, qtd })
+      const checked = await products.findByPk(product_id)
+      if (!checked) {
+        allChecked = false
+        return res.status(400).json({ message: `Produto ${product_id} não encontrado!` })
+      }
     })
 
-    await Promise.all(promises);
+    await Promise.all(checkProduct);
 
-    const newOrder = await orders.findByPk(order_id, {
-      include: {
-        association: 'products',
-        attributes: { exclude: ["createdAt", "updatedAt"] },
-        through: {
-          as: 'qtd',
-          attributes: ['qtd']
-        }
-      },
-    });
+    if (allChecked) {
+      const order = await orders.create({ client_name, table, user_id, processedAt: new Date() })
+      const order_id = order.id;
 
-    res.status(200).send(newOrder);
+      const createAssociation = productsArray.map(async product => {
+        product_id = product.id;
+        qtd = product.qtd;
+        await ordersproducts.create({ order_id, product_id, qtd })
+      })
+
+      await Promise.all(createAssociation);
+
+      const newOrder = await orders.findByPk(order_id, {
+        include: {
+          association: 'products',
+          attributes: { exclude: ["createdAt", "updatedAt"] },
+          through: {
+            as: 'qtd',
+            attributes: ['qtd']
+          }
+        },
+      });
+
+      res.status(200).send(newOrder);
+    }
   }
   catch (error) {
     next(error)
   }
 }
 
-// Feito! testar novamente
+// Feito!
 const updateOrder = async (req, res, next) => {
   try {
     const order_id = req.params.orderId;

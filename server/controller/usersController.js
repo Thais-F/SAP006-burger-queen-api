@@ -39,7 +39,7 @@ const postUsers = async (req, res, next) => {
   }
 }
 
-// feito! testar novamente
+// feito!
 const updateUser = async (req, res, next) => {
   try {
     const user_id = req.params.uid;

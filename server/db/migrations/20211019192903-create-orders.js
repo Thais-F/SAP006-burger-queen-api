@@ -9,6 +9,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       client_name: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       user_id: {
@@ -19,9 +20,11 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       table: {
+        allowNull: false,
         type: Sequelize.INTEGER
       },
       status: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       processedAt: {
